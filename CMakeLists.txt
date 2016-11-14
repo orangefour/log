@@ -1,4 +1,4 @@
-find_package(Qt5 COMPONENTS Network Quick Bluetooth Positioning REQUIRED)
+find_package(Qt5 COMPONENTS Core REQUIRED)
 
 file(GLOB_RECURSE SOURCES *.cpp)
 add_library(log SHARED ${SOURCES})
