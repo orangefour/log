@@ -8,12 +8,6 @@ Folders::Folders(QObject* parent)
   : QObject(parent) {
 }
 
-QObject* Folders::singletontypeProvider(QQmlEngine* /*engine*/,
-                                        QJSEngine* /*scriptEngine*/) {
-  Folders* o = new Folders();
-  return o;
-}
-
 QString Folders::appData() {
   QString path =
 #ifdef Q_OS_ANDROID
