@@ -65,13 +65,6 @@ QLog::QLog(QObject* parent)
   : QObject(parent) {
 }
 
-QObject* QLog::singletontypeProvider(QQmlEngine* /*engine*/,
-                                     QJSEngine* /*scriptEngine*/) {
-
-  g_qlog = new QLog();
-  return g_qlog;
-}
-
 void QLog::error(const QString& error) {
   Log::error(error.toStdString());
 }

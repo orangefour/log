@@ -49,8 +49,6 @@ class QLog : public QObject {
   Q_OBJECT
 public:
   QLog(QObject* parent = nullptr);
-  static QObject* singletontypeProvider(QQmlEngine* engine,
-                                        QJSEngine* scriptEngine);
 
 signals:
   void showIndicator(bool show);
