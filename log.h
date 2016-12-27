@@ -26,8 +26,8 @@ public:
 
   template <typename... Args>
   static void debug(const Args&... args) {
-    console()->debug(args...);
 #ifndef NDEBUG
+    console()->debug(args...);
     file()->debug(args...);
     file()->flush();
 #endif
