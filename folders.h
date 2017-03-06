@@ -10,6 +10,7 @@ public:
 
 public slots:
   static QString appData();
+  static QString documents();
   static QString temp();
   static QString downloads();
 

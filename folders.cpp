@@ -18,6 +18,14 @@ QString Folders::appData() {
   return finish(path);
 }
 
+QString Folders::documents() {
+#ifdef Q_OS_IOS
+  return finish(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+#else
+  return appData();
+#endif
+}
+
 QString Folders::temp() {
   return QStandardPaths::writableLocation(QStandardPaths::TempLocation) +
          QDir::separator();
