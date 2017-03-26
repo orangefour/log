@@ -7,7 +7,11 @@
 #include <spdlog/fmt/ostr.h>
 #include <spdlog/spdlog.h>
 
-struct unused { template<typename ...Args> unused(Args const & ... ) {} };
+struct unused {
+  template <typename... Args>
+  unused(Args const&...) {
+  }
+};
 
 class Log {
 public:
@@ -33,7 +37,7 @@ public:
     file()->debug(args...);
     file()->flush();
 #else
-    unused { args... };
+    unused{args...};
 #endif
   }
 

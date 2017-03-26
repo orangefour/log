@@ -20,7 +20,8 @@ QString Folders::appData() {
 
 QString Folders::documents() {
 #ifdef Q_OS_IOS
-  return finish(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+  return finish(
+      QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
 #else
   return appData();
 #endif
