@@ -70,4 +70,4 @@ namespace fmt {
 namespace internal {
 FMT_DISABLE_CONVERSION_TO_INT(QByteArray);
 }
-}
+} // namespace fmt
