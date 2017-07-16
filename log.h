@@ -20,7 +20,6 @@ public:
     console()->error(args...);
     file()->error(args...);
     file()->flush();
-    showIndicator();
   }
 
   template <typename... Args>
@@ -44,7 +43,6 @@ public:
 private:
   static std::shared_ptr<spdlog::logger> console();
   static std::shared_ptr<spdlog::logger> file();
-  static void showIndicator();
 };
 
 std::ostream& operator<<(std::ostream& stream, const QString& str);
@@ -57,9 +55,6 @@ class QLog : public QObject {
   Q_OBJECT
 public:
   QLog(QObject* parent = nullptr);
-
-signals:
-  void showIndicator(bool show);
 
 public slots:
   void error(const QString& str);

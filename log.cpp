@@ -17,7 +17,11 @@ class QDebugSink : public spdlog::sinks::sink {
 };
 #endif
 
-QLog* g_qlog = nullptr;
+struct spdlog_init {
+  spdlog_init() {
+    spdlog::set_pattern("[%L %H:%M:%S.%e] %v");
+  }
+} spdlog_init_inst;
 
 std::shared_ptr<spdlog::logger> Log::console() {
   static std::shared_ptr<spdlog::logger> logger;
@@ -29,22 +33,20 @@ std::shared_ptr<spdlog::logger> Log::console() {
     logger = spdlog::stdout_color_mt("console");
 #endif
     logger->set_level(spdlog::level::trace);
+    logger->info("============= console logger created =============");
   }
   return logger;
 }
 
 std::shared_ptr<spdlog::logger> Log::file() {
   static QString path = Folders::appData();
-  static auto logger =
-      spdlog::rotating_logger_mt("file", qPrintable(path + "log.txt"), 1024 * 1024 * 1, 1);
-  return logger;
-}
-
-void Log::showIndicator() {
-  Log::info("{}: {}", __PRETTY_FUNCTION__, (void*)g_qlog);
-  if (g_qlog) {
-    g_qlog->showIndicator(true);
+  static std::shared_ptr<spdlog::logger> logger;
+  if (!logger) {
+    logger = spdlog::rotating_logger_mt("file", qPrintable(path + "log.txt"),
+                                        64 * 1024 * 1, 0);
+    logger->info("================= logger created =================");
   }
+  return logger;
 }
 
 std::ostream& operator<<(std::ostream& stream, const QString& str) {
