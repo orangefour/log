@@ -26,7 +26,7 @@ std::shared_ptr<spdlog::logger> Log::console() {
     auto sink = std::make_shared<QDebugSink>();
     logger = std::make_shared<spdlog::logger>("console", sink);
 #else
-    logger = spdlog::stdout_logger_mt("console");
+    logger = spdlog::stdout_color_mt("console");
 #endif
     logger->set_level(spdlog::level::trace);
   }
@@ -36,7 +36,7 @@ std::shared_ptr<spdlog::logger> Log::console() {
 std::shared_ptr<spdlog::logger> Log::file() {
   static QString path = Folders::appData();
   static auto logger =
-      spdlog::basic_logger_mt("file", qPrintable(path + "log.txt"), true);
+      spdlog::rotating_logger_mt("file", qPrintable(path + "log.txt"), 1024 * 1024 * 1, 1);
   return logger;
 }
 
