@@ -43,7 +43,7 @@ std::shared_ptr<spdlog::logger> Log::file() {
   static std::shared_ptr<spdlog::logger> logger;
   if (!logger) {
     logger = spdlog::rotating_logger_mt("file", qPrintable(path + "log.txt"),
-                                        64 * 1024 * 1, 0);
+                                        128 * 1024 * 1, 0);
     logger->info("================= logger created =================");
   }
   return logger;
