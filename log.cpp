@@ -3,19 +3,7 @@
 #include <QDir>
 #include <QStandardPaths>
 #include <iomanip>
-
 #include <QtGlobal>
-#ifdef Q_OS_ANDROID
-#include <QDebug>
-#include <spdlog/sinks/sink.h>
-class QDebugSink : public spdlog::sinks::sink {
-  void log(const spdlog::details::log_msg& msg) override {
-    qDebug() << QString::fromStdString(msg.formatted.str());
-  }
-  void flush() {
-  }
-};
-#endif
 
 struct spdlog_init {
   spdlog_init() {
@@ -23,15 +11,21 @@ struct spdlog_init {
   }
 } spdlog_init_inst;
 
+std::shared_ptr<spdlog::sinks::sink> g_sink;
+void Log::set_debug_sink(std::shared_ptr<spdlog::sinks::sink> sink) {
+  g_sink = sink;
+}
+
 std::shared_ptr<spdlog::logger> Log::console() {
   static std::shared_ptr<spdlog::logger> logger;
   if (!logger) {
-#ifdef Q_OS_ANDROID
-    auto sink = std::make_shared<QDebugSink>();
-    logger = std::make_shared<spdlog::logger>("console", sink);
-#else
-    logger = spdlog::stdout_color_mt("console");
-#endif
+    if (g_sink) {
+      logger = std::make_shared<spdlog::logger>("console", g_sink);
+      // a bug with spdlog, need to set format again
+      logger->set_pattern("[%L %H:%M:%S.%e] %v");
+    } else {
+      logger = spdlog::stdout_color_mt("console");
+    }
     logger->set_level(spdlog::level::trace);
     logger->info("============= console logger created =============");
   }

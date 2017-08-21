@@ -17,14 +17,18 @@ class Log {
 public:
   template <typename... Args>
   static void error(const Args&... args) {
-    console()->error(args...);
+#ifndef NDEBUG
+    console()->info(args...);
+#endif
     file()->error(args...);
     file()->flush();
   }
 
   template <typename... Args>
   static void info(const Args&... args) {
+#ifndef NDEBUG
     console()->info(args...);
+#endif
     file()->info(args...);
     file()->flush();
   }
@@ -39,6 +43,8 @@ public:
     unused{args...};
 #endif
   }
+
+  static void set_debug_sink(std::shared_ptr<spdlog::sinks::sink> sink);
 
 private:
   static std::shared_ptr<spdlog::logger> console();
