@@ -2,8 +2,8 @@
 #include "folders.h"
 #include <QDir>
 #include <QStandardPaths>
-#include <iomanip>
 #include <QtGlobal>
+#include <iomanip>
 
 struct spdlog_init {
   spdlog_init() {
