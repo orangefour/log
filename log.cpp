@@ -53,7 +53,7 @@ std::ostream& operator<<(std::ostream& stream, const QByteArray& ba) {
     b &= 0xFF;
     stream << std::hex << std::setw(2) << std::setfill('0') << b;
   }
-  stream << "(" << ba.size() << ")";
+  stream << std::dec << "(" << ba.size() << ")";
   return stream;
 }
 
