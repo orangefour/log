@@ -18,7 +18,7 @@ public:
   template <typename... Args>
   static void error(const Args&... args) {
 #ifndef NDEBUG
-    console()->info(args...);
+    console()->error(args...);
 #endif
     file()->error(args...);
     file()->flush();
