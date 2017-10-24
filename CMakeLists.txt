@@ -1,6 +1,8 @@
 find_package(Qt5 COMPONENTS Core REQUIRED)
 
-file(GLOB_RECURSE SOURCES *.cpp)
+add_subdirectory(spdlog)
+
+file(GLOB SOURCES *.cpp)
 add_library(log SHARED ${SOURCES})
 target_link_libraries(log spdlog)
 target_include_directories(log PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
