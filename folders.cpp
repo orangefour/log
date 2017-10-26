@@ -1,4 +1,5 @@
 #include "folders.h"
+#include <QCoreApplication>
 #include <QDir>
 #include <QStandardPaths>
 #include <QtGlobal>
@@ -6,6 +7,10 @@
 
 Folders::Folders(QObject* parent)
   : QObject(parent) {
+}
+
+QString Folders::appDir() {
+  return QCoreApplication::applicationDirPath() + QDir::separator();
 }
 
 QString Folders::appData() {

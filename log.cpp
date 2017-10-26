@@ -16,6 +16,11 @@ void Log::set_debug_sink(std::shared_ptr<spdlog::sinks::sink> sink) {
   g_sink = sink;
 }
 
+QString Log::fn = "log.txt";
+void Log::set_file_name(const char* _fn) {
+  fn = _fn;
+}
+
 std::shared_ptr<spdlog::logger> Log::console() {
   static std::shared_ptr<spdlog::logger> logger;
   if (!logger) {
@@ -27,18 +32,19 @@ std::shared_ptr<spdlog::logger> Log::console() {
       logger = spdlog::stdout_color_mt("console");
     }
     logger->set_level(spdlog::level::trace);
-    logger->info("============= console logger created =============");
+    logger->info("============= console logger created ==============");
   }
   return logger;
 }
 
 std::shared_ptr<spdlog::logger> Log::file() {
-  static QString path = Folders::appData();
+  static QString path = Folders::appData() + fn;
   static std::shared_ptr<spdlog::logger> logger;
   if (!logger) {
-    logger = spdlog::rotating_logger_mt("file", qPrintable(path + "log.txt"),
+    logger = spdlog::rotating_logger_mt("file", qPrintable(path),
                                         128 * 1024 * 1, 0);
-    logger->info("================= logger created =================");
+    logger->info("* log file: {}", path);
+    console()->info("* log file: {}", path);
   }
   return logger;
 }
