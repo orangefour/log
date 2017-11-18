@@ -1,4 +1,5 @@
 #include "folders.h"
+#include <QCoreApplication>
 #include <QDir>
 #include <QStandardPaths>
 #include <QtGlobal>
@@ -6,6 +7,10 @@
 
 Folders::Folders(QObject* parent)
   : QObject(parent) {
+}
+
+QString Folders::appDir() {
+  return finish(QCoreApplication::applicationDirPath());
 }
 
 QString Folders::appData() {
@@ -28,17 +33,16 @@ QString Folders::documents() {
 }
 
 QString Folders::temp() {
-  return QStandardPaths::writableLocation(QStandardPaths::TempLocation) +
-         QDir::separator();
+  return finish(QStandardPaths::writableLocation(QStandardPaths::TempLocation));
 }
 
 QString Folders::downloads() {
-  return QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) +
-         QDir::separator();
+  return finish(
+      QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
 }
 
 QString Folders::finish(QString path) {
-  path += QDir::separator();
+  path += "/";
   if (!QDir().mkpath(path)) {
     std::cerr << "Can not create folder: " << qPrintable(path) << std::endl;
   }

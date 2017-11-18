@@ -9,6 +9,7 @@ public:
   Folders(QObject* parent = nullptr);
 
 public slots:
+  static QString appDir();
   static QString appData();
   static QString documents();
   static QString temp();
