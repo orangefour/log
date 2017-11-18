@@ -41,8 +41,8 @@ std::shared_ptr<spdlog::logger> Log::file() {
   static QString path = Folders::appData() + fn;
   static std::shared_ptr<spdlog::logger> logger;
   if (!logger) {
-    logger = spdlog::rotating_logger_mt("file", qPrintable(path),
-                                        128 * 1024 * 1, 0);
+    logger =
+        spdlog::rotating_logger_mt("file", qPrintable(path), 128 * 1024 * 1, 0);
     logger->info("* log file: {}", path);
     console()->info("* log file: {}", path);
   }

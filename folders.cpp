@@ -37,7 +37,8 @@ QString Folders::temp() {
 }
 
 QString Folders::downloads() {
-  return finish(QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
+  return finish(
+      QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
 }
 
 QString Folders::finish(QString path) {
