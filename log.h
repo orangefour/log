@@ -46,12 +46,10 @@ public:
   }
 
   static void set_debug_sink(std::shared_ptr<spdlog::sinks::sink> sink);
-  static void set_file_name(const char* fn);
 
 private:
   static std::shared_ptr<spdlog::logger> console();
   static std::shared_ptr<spdlog::logger> file();
-  static QString fn;
 };
 
 std::ostream& operator<<(std::ostream& stream, const QString& str);

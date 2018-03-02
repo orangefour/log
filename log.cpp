@@ -16,11 +16,6 @@ void Log::set_debug_sink(std::shared_ptr<spdlog::sinks::sink> sink) {
   g_sink = sink;
 }
 
-QString Log::fn = "log.txt";
-void Log::set_file_name(const char* _fn) {
-  fn = _fn;
-}
-
 std::shared_ptr<spdlog::logger> Log::console() {
   static std::shared_ptr<spdlog::logger> logger;
   if (!logger) {
@@ -38,13 +33,14 @@ std::shared_ptr<spdlog::logger> Log::console() {
 }
 
 std::shared_ptr<spdlog::logger> Log::file() {
-  static QString path = Folders::appData() + fn;
+  static QString path = Folders::logs() + "log.txt";
   static std::shared_ptr<spdlog::logger> logger;
   if (!logger) {
-    logger =
-        spdlog::rotating_logger_mt("file", qPrintable(path), 1024 * 1024 * 1, 0);
-    logger->info("* log file: {}", path);
-    console()->info("* log file: {}", path);
+    auto daily_sink = std::make_shared<spdlog::sinks::daily_file_sink<
+        std::mutex, spdlog::sinks::dateonly_daily_file_name_calculator>>(
+        qPrintable(path), 0, 0);
+    logger = std::make_shared<spdlog::logger>("file", daily_sink);
+    logger->set_pattern("[%L %H:%M:%S.%e] %v");
   }
   return logger;
 }

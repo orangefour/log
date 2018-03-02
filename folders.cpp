@@ -23,6 +23,11 @@ QString Folders::appData() {
   return finish(path);
 }
 
+QString Folders::logs() {
+  QString path = appData() + "logs";
+  return finish(path);
+}
+
 QString Folders::documents() {
 #ifdef Q_OS_IOS
   return finish(
