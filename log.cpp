@@ -27,7 +27,7 @@ std::shared_ptr<spdlog::logger> Log::console() {
       logger = spdlog::stdout_color_mt("console");
     }
     logger->set_level(spdlog::level::trace);
-    logger->info("============= console logger created ==============");
+    logger->info("======= console logger created =======");
   }
   return logger;
 }
