@@ -11,7 +11,6 @@ public:
 public slots:
   static QString appDir();
   static QString appData();
-  static QString logs();
   static QString documents();
   static QString temp();
   static QString downloads();

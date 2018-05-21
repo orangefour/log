@@ -33,7 +33,7 @@ std::shared_ptr<spdlog::logger> Log::console() {
 }
 
 std::shared_ptr<spdlog::logger> Log::file() {
-  static QString path = Folders::logs() + "log.txt";
+  static QString path = Folders::documents() + "log.txt";
   static std::shared_ptr<spdlog::logger> logger;
   if (!logger) {
     auto daily_sink = std::make_shared<spdlog::sinks::daily_file_sink<
