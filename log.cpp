@@ -63,10 +63,14 @@ QLog::QLog(QObject* parent)
   : QObject(parent) {
 }
 
-void QLog::error(const QString& error) {
-  Log::error(error.toStdString());
+void QLog::error(const QString& str) {
+  Log::error(str.toStdString());
 }
 
-void QLog::info(const QString& info) {
-  Log::info(info.toStdString());
+void QLog::info(const QString& str) {
+  Log::info(str.toStdString());
+}
+
+void QLog::debug(const QString& str) {
+  Log::debug(str.toStdString());
 }

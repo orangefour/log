@@ -66,6 +66,7 @@ public:
 public slots:
   void error(const QString& str);
   void info(const QString& str);
+  void debug(const QString& str);
 };
 
 namespace fmt {
