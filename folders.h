@@ -14,7 +14,5 @@ public slots:
   static QString documents();
   static QString temp();
   static QString downloads();
-
-private:
   static QString finish(QString path);
 };
