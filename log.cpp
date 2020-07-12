@@ -5,58 +5,52 @@
 #include <QtGlobal>
 #include <iomanip>
 
-struct spdlog_init {
-  spdlog_init() {
-    spdlog::set_pattern("[%L %H:%M:%S.%e] %v");
-  }
-} spdlog_init_inst;
-
-std::shared_ptr<spdlog::sinks::sink> g_sink;
-void Log::set_debug_sink(std::shared_ptr<spdlog::sinks::sink> sink) {
-  g_sink = sink;
-}
-
-std::shared_ptr<spdlog::logger> Log::console() {
-  static std::shared_ptr<spdlog::logger> logger;
-  if (!logger) {
-    if (g_sink) {
-      logger = std::make_shared<spdlog::logger>("console", g_sink);
-      // a bug with spdlog, need to set format again
-      logger->set_pattern("[%L %H:%M:%S.%e] %v");
-    } else {
-      logger = spdlog::stdout_color_mt("console");
-    }
-    logger->set_level(spdlog::level::trace);
-    logger->info("======= console logger created =======");
-  }
-  return logger;
-}
-
-std::shared_ptr<spdlog::logger> Log::file() {
-  static QString path = Folders::documents() + "log.txt";
-  static std::shared_ptr<spdlog::logger> logger;
-  if (!logger) {
-    auto daily_sink = std::make_shared<spdlog::sinks::daily_file_sink<
-        std::mutex, spdlog::sinks::dateonly_daily_file_name_calculator>>(
-        qPrintable(path), 0, 0);
-    logger = std::make_shared<spdlog::logger>("file", daily_sink);
-    logger->set_pattern("[%L %H:%M:%S.%e] %v");
-  }
-  return logger;
-}
+#include <spdlog/async.h>
+#include <spdlog/sinks/daily_file_sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
 
 std::ostream& operator<<(std::ostream& stream, const QString& str) {
   stream << str.toStdString();
   return stream;
 }
 
-std::ostream& operator<<(std::ostream& stream, const QByteArray& ba) {
-  for (uint16_t b : ba) {
-    b &= 0xFF;
-    stream << std::hex << std::setw(2) << std::setfill('0') << b;
+void Log::flush() {
+  logger()->flush();
+}
+
+std::shared_ptr<spdlog::sinks::sink> Log::debug_sink;
+
+void Log::set_debug_sink(std::shared_ptr<spdlog::sinks::sink> sink) {
+  debug_sink = sink;
+}
+
+std::shared_ptr<spdlog::logger> Log::logger() {
+  static std::shared_ptr<spdlog::logger> logger;
+  if (!logger) {
+    std::vector<std::shared_ptr<spdlog::sinks::sink>> sinks;
+    if (!debug_sink) {
+      debug_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+    }
+    sinks.push_back(debug_sink);
+
+    QString path = Folders::documents() + "log.txt";
+    auto daily_sink = std::make_shared<spdlog::sinks::daily_file_sink<
+        std::mutex, spdlog::sinks::daily_filename_calculator>>(
+        qPrintable(path), 0, 0);
+    sinks.push_back(daily_sink);
+
+    spdlog::init_thread_pool(8192, 1);
+    logger = std::make_shared<spdlog::async_logger>("metrlogger", sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
+    logger->set_pattern("[%L %H:%M:%S.%e] %v");
+    logger->set_level(spdlog::level::
+#ifdef NDEBUG
+    info
+#else
+    trace
+#endif
+    );
   }
-  stream << std::dec << "(" << ba.size() << ")";
-  return stream;
+  return logger;
 }
 
 QLog::QLog(QObject* parent)
@@ -73,4 +67,8 @@ void QLog::info(const QString& str) {
 
 void QLog::debug(const QString& str) {
   Log::debug(str.toStdString());
+}
+
+void QLog::flush() {
+  Log::flush();
 }
