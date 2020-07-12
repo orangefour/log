@@ -26,11 +26,8 @@ public:
 
   static void flush();
 
-  static void set_debug_sink(std::shared_ptr<spdlog::sinks::sink> sink);
-
 private:
   static std::shared_ptr<spdlog::logger> logger();
-  static std::shared_ptr<spdlog::sinks::sink> debug_sink;
 };
 
 class QQmlEngine;

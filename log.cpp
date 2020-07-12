@@ -8,6 +8,7 @@
 #include <spdlog/async.h>
 #include <spdlog/sinks/daily_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/sinks/android_sink.h>
 
 std::ostream& operator<<(std::ostream& stream, const QString& str) {
   stream << str.toStdString();
@@ -18,20 +19,19 @@ void Log::flush() {
   logger()->flush();
 }
 
-std::shared_ptr<spdlog::sinks::sink> Log::debug_sink;
-
-void Log::set_debug_sink(std::shared_ptr<spdlog::sinks::sink> sink) {
-  debug_sink = sink;
-}
-
 std::shared_ptr<spdlog::logger> Log::logger() {
   static std::shared_ptr<spdlog::logger> logger;
   if (!logger) {
     std::vector<std::shared_ptr<spdlog::sinks::sink>> sinks;
-    if (!debug_sink) {
-      debug_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-    }
-    sinks.push_back(debug_sink);
+
+    auto sink = std::make_shared<spdlog::sinks::
+#ifdef __ANDROID__
+    android_sink_mt>("metr.at"
+#else
+    stdout_color_sink_mt>(
+#endif
+    );
+    sinks.push_back(sink);
 
     QString path = Folders::documents() + "log.txt";
     auto daily_sink = std::make_shared<spdlog::sinks::daily_file_sink<
