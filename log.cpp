@@ -43,11 +43,11 @@ std::shared_ptr<spdlog::logger> Log::logger() {
     logger = std::make_shared<spdlog::async_logger>("metrlogger", sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
     logger->set_pattern("[%L %H:%M:%S.%e] %v");
     logger->set_level(spdlog::level::
-#ifdef NDEBUG
+//#ifdef NDEBUG
     info
-#else
-    trace
-#endif
+// #else
+//     trace
+// #endif
     );
   }
   return logger;
