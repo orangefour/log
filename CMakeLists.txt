@@ -8,6 +8,5 @@ set(CMAKE_AUTORCC ON)
 
 file(GLOB SOURCES *.cpp)
 add_library(log ${SOURCES})
-target_link_libraries(log spdlog)
+target_link_libraries(log spdlog Qt::Core)
 target_include_directories(log PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-qt5_use_modules(log Core)
