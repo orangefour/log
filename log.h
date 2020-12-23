@@ -3,9 +3,20 @@
 #include <QByteArray>
 #include <QString>
 #include <ostream>
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Weffc++"
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
+
 #include <spdlog/fmt/fmt.h>
 #include <spdlog/fmt/ostr.h>
 #include <spdlog/spdlog.h>
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 class Log {
 public:
