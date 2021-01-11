@@ -19,6 +19,10 @@ void Log::flush() {
   logger()->flush();
 }
 
+void Log::enableDebug(bool enable) {
+  logger()->set_level(enable ? spdlog::level::trace : spdlog::level::info);
+}
+
 std::shared_ptr<spdlog::logger> Log::logger() {
   static std::shared_ptr<spdlog::logger> logger;
   if (!logger) {
@@ -71,4 +75,8 @@ void QLog::debug(const QString& str) {
 
 void QLog::flush() {
   Log::flush();
+}
+
+void QLog::enableDebug(bool enable) {
+  Log::enableDebug(enable);
 }

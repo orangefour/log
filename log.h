@@ -36,6 +36,7 @@ public:
   }
 
   static void flush();
+  static void enableDebug(bool enable);
 
 private:
   static std::shared_ptr<spdlog::logger> logger();
@@ -53,6 +54,7 @@ public slots:
   void error(const QString& str);
   void info(const QString& str);
   void debug(const QString& str);
+  void enableDebug(bool enable);
   void flush();
 };
 
