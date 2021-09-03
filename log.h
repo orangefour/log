@@ -10,9 +10,9 @@
 #pragma GCC diagnostic ignored "-Wshadow"
 #endif
 
-#include <spdlog/spdlog.h>
-#include <spdlog/fmt/ostr.h>
 #include <spdlog/fmt/fmt.h>
+#include <spdlog/fmt/ostr.h>
+#include <spdlog/spdlog.h>
 
 #if defined(__GNUC__)
 #pragma GCC diagnostic pop
@@ -58,11 +58,22 @@ public slots:
   void flush();
 };
 
-namespace fmt {
-namespace internal {
-FMT_DISABLE_CONVERSION_TO_INT(QByteArray);
-}
-} // namespace fmt
-
 std::ostream& operator<<(std::ostream& stream, const QString& str);
-std::ostream& operator<<(std::ostream& stream, const QByteArray& ba);
+
+template <>
+struct fmt::formatter<QByteArray> {
+  template <typename ParseContext>
+  auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
+    for (auto it = ctx.begin(); it != ctx.end(); ++it) {
+      if (*it == '}') {
+        return it;
+      }
+    }
+    throw format_error("invalid format");
+  }
+  template <typename FormatContext>
+  auto format(const QByteArray& ba, FormatContext& ctx) -> decltype(ctx.out()) {
+    QString qs = ba.toHex();
+    return format_to(ctx.out(), "{}({})", qs, ba.size());
+  }
+};
