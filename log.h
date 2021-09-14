@@ -58,22 +58,5 @@ public slots:
   void flush();
 };
 
+std::ostream& operator<<(std::ostream& stream, const QByteArray& ba);
 std::ostream& operator<<(std::ostream& stream, const QString& str);
-
-template <>
-struct fmt::formatter<QByteArray> {
-  template <typename ParseContext>
-  auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
-    for (auto it = ctx.begin(); it != ctx.end(); ++it) {
-      if (*it == '}') {
-        return it;
-      }
-    }
-    throw format_error("invalid format");
-  }
-  template <typename FormatContext>
-  auto format(const QByteArray& ba, FormatContext& ctx) -> decltype(ctx.out()) {
-    QString qs = ba.toHex();
-    return format_to(ctx.out(), "{}({})", qs, ba.size());
-  }
-};

@@ -10,6 +10,12 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/android_sink.h>
 
+std::ostream& operator<<(std::ostream& stream, const QByteArray& ba) {
+  QString qs = ba.toHex();
+  stream << qs;
+  return stream;
+}
+
 std::ostream& operator<<(std::ostream& stream, const QString& str) {
   stream << str.toStdString();
   return stream;
