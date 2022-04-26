@@ -21,6 +21,21 @@ std::ostream& operator<<(std::ostream& stream, const QString& str) {
   return stream;
 }
 
+std::ostream& operator<<(std::ostream& stream, const QStringList& strl) {
+  stream << "[";
+  bool first = true;
+  for (const auto& s : strl) {
+    if (!first) {
+      stream << ",";
+    } else {
+      first = false;
+    }
+    stream << s;
+  }
+  stream << "]";
+  return stream;
+}
+
 void Log::flush() {
   logger()->flush();
 }
