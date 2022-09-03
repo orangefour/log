@@ -1,4 +1,5 @@
-find_package(Qt6 COMPONENTS Core REQUIRED)
+find_package(QT NAMES Qt6 COMPONENTS Core REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Core)
 
 set(CMAKE_AUTOMOC OFF)
 set(CMAKE_AUTORCC OFF)
@@ -8,5 +9,5 @@ set(CMAKE_AUTORCC ON)
 
 file(GLOB SOURCES *.cpp)
 add_library(log ${SOURCES})
-target_link_libraries(log spdlog Qt::Core)
+target_link_libraries(log spdlog Qt6::Core)
 target_include_directories(log PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
